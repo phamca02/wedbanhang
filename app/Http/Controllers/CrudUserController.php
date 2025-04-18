@@ -65,8 +65,7 @@ class CrudUserController extends Controller
         $data = $request->all();
         $check = User::create([
             'name' => $data['name'],
-            'phone' => $data['phone'],
-            'address' => $data['address'],
+        
             'email' => $data['email'],
             'password' => Hash::make($data['password'])
         ]);
@@ -121,8 +120,6 @@ class CrudUserController extends Controller
        $user = User::find($input['id']);
 
        $user->name = $input['name'];
-       $user->phone = $input['phone'];
-       $user->address = $input['address'];
        $user->email = $input['email'];
        $user->password = $input['password'];
        $user->save();
@@ -135,8 +132,12 @@ class CrudUserController extends Controller
      */
     public function listUser()
     {
-        if(Auth::check()){
-            $users = User::all();
+        if (Auth::check()) {
+            $users = User::select('users.id', 'users.name', 'users.email', 'roles.role_name') // Chọn các trường cần thiết
+                ->leftJoin('user_roles', 'users.id', '=', 'user_roles.user_id') // Kết nối với bảng user_roles
+                ->leftJoin('roles', 'user_roles.role_id', '=', 'roles.id') // Kết nối với bảng roles
+                ->get();
+    
             return view('crud_user.list', ['users' => $users]);
         }
 

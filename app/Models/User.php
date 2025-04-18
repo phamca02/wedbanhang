@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Database\Seeders\UserRolesTableSeeder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -26,8 +28,6 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'phone',
-        'address',
         'email',
         'password',
     ];
@@ -51,4 +51,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(UserRolesTableSeeder::class, 'user_roles');
+    }
 }
