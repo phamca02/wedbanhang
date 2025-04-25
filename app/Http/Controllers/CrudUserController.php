@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\order_detail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -104,6 +105,17 @@ class CrudUserController extends Controller
         return view('crud_user.update', ['user' => $user]);
     }
 
+    public function chitiethoadon(Request $request)
+{
+    $orders = order_detail::select('products.name as product_name', 'products.id as product_id', 'products.price')
+        ->join('products', 'products.id', '=', 'order_details.product_id')
+        ->where('order_details.order_id', $request->get('order_id'))
+        ->get();
+
+
+    return view('crud_user.orderdetail', compact('orders'));
+}
+
     /**
      * Submit form update user
      */
@@ -133,10 +145,14 @@ class CrudUserController extends Controller
     public function listUser()
     {
         if (Auth::check()) {
-            $users = User::select('users.id', 'users.name', 'users.email', 'roles.role_name') // Chọn các trường cần thiết
-                ->leftJoin('user_roles', 'users.id', '=', 'user_roles.user_id') // Kết nối với bảng user_roles
-                ->leftJoin('roles', 'user_roles.role_id', '=', 'roles.id') // Kết nối với bảng roles
-                ->get();
+            // $users = User::select('users.id', 'users.name', 'users.email', 'roles.role_name') // Chọn các trường cần thiết
+            //     ->leftJoin('user_roles', 'users.id', '=', 'user_roles.user_id') // Kết nối với bảng user_roles
+            //     ->leftJoin('roles', 'user_roles.role_id', '=', 'roles.id') // Kết nối với bảng roles
+            //     ->get();
+
+            $users = User::select('users.*', 'orders.order_name as order_name', 'orders.id as order_id')
+            ->join('orders', 'orders.user_id', '=', 'users.id')
+            ->get();
     
             return view('crud_user.list', ['users' => $users]);
         }

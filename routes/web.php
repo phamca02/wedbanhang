@@ -31,6 +31,8 @@ Route::post('update', [CrudUserController::class, 'postUpdateUser'])->name('user
 
 Route::get('list', [CrudUserController::class, 'listUser'])->name('user.list');
 
+Route::get('/detai_oder', [CrudUserController::class, 'chitiethoadon'])->name('order_detail');
+
 Route::get('signout', [CrudUserController::class, 'signOut'])->name('signout');
 
 Route::get('/', function () {

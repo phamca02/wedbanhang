@@ -12,27 +12,15 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert([
-            [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-                'password' => bcrypt('password'), // Mật khẩu đã được mã hóa
-            ],
-            [
-                'name' => 'Leader User',
-                'email' => 'leader@example.com',
-                'password' => bcrypt('password'),
-            ],
-            [
-                'name' => 'Manager User',
-                'email' => 'manager@example.com',
-                'password' => bcrypt('password'),
-            ],
-            [
-                'name' => 'Subscriber User',
-                'email' => 'subscriber@example.com',
-                'password' => bcrypt('password'),
-            ],
-        ]);
+        for ($i = 1; $i <= 50; $i++) {
+            DB::table('users')->insert([
+                'name' => 'Người dùng ' . $i,
+                'email' => 'user' . $i . '@example.com',
+                'password' => bcrypt('password'), // Mật khẩu đã mã hóa
+                // 'role_id' => rand(1, 3), // Giả sử có 5 vai trò khác nhau
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }
